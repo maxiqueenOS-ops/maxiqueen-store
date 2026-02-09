@@ -1,517 +1,226 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MAXIQUEEN STORE | Compra Directa</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg-dark: #0f0f0f;
-      --bg-light: #ffffff;
-      --text-dark: #ffffff;
-      --text-light: #111111;
-      --gold: #FFD700;
-      --green: #25D366;
-      --card-dark: #1a1a1a;
-      --card-light: #f5f5f5;
-    }
+<meta charset="UTF-8">
+<title>MAXIQUEEN OS — Page Editor 👑</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+<!-- CodeMirror -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/eclipse.min.css">
 
-    body {
-      background: var(--bg-dark);
-      color: var(--text-dark);
-      line-height: 1.6;
-      transition: 0.3s;
-    }
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
 
-    body.light {
-      background: var(--bg-light);
-      color: var(--text-light);
-    }
-
-    a { text-decoration: none; }
-
-    /* HEADER */
-    header {
-      background: #000;
-      padding: 16px 32px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-    }
-
-    body.light header { background: #fff; border-bottom: 1px solid #ddd; }
-
-    header h1 { color: var(--gold); font-size: 1.8rem; font-weight: 800; letter-spacing: 1px; }
-
-    nav a {
-      color: inherit;
-      margin-left: 20px;
-      font-weight: 600;
-      opacity: 0.85;
-    }
-
-    nav a:hover { color: var(--gold); opacity: 1; }
-
-    .toggle-btn {
-      margin-left: 20px;
-      background: none;
-      border: 2px solid var(--gold);
-      color: var(--gold);
-      padding: 6px 12px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-weight: 700;
-    }
-
-    /* HERO ULTRA VENTA */
-    .hero {
-      min-height: 92vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 80px 20px;
-      background: radial-gradient(circle at top, rgba(255,215,0,0.15), transparent 60%),
-                  linear-gradient(to bottom, #000, #111);
-    }
-
-    body.light .hero {
-      background: radial-gradient(circle at top, rgba(255,215,0,0.2), transparent 60%),
-                  linear-gradient(to bottom, #fff, #f5f5f5);
-    }
-
-    .hero h2 {
-      font-size: 3rem;
-      color: var(--gold);
-      margin-bottom: 20px;
-      font-weight: 800;
-    }
-
-    .hero p {
-      font-size: 1.25rem;
-      max-width: 720px;
-      margin: 0 auto 30px;
-      opacity: 0.9;
-    }
-
-    .hero .cta {
-      display: inline-block;
-      background: var(--green);
-      color: #fff;
-      padding: 18px 36px;
-      border-radius: 50px;
-      font-size: 1.1rem;
-      font-weight: 800;
-      box-shadow: 0 10px 30px rgba(37,211,102,0.3);
-      transition: 0.25s;
-    }
-
-    .hero .cta:hover { transform: scale(1.05); background: #1ebe5d; }
-
-    .hero .trust {
-      margin-top: 20px;
-      font-size: 0.95rem;
-      opacity: 0.75;
-    }
-
-    /* BENEFICIOS */
-    .benefits {
-      padding: 80px 20px;
-      max-width: 1200px;
-      margin: auto;
-      text-align: center;
-    }
-
-    .benefits h3 {
-      font-size: 2.4rem;
-      color: var(--gold);
-      margin-bottom: 50px;
-      font-weight: 800;
-    }
-
-    .benefits-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 30px;
-    }
-
-    .benefit-card {
-      background: var(--card-dark);
-      padding: 30px 25px;
-      border-radius: 18px;
-      transition: 0.3s;
-    }
-
-    body.light .benefit-card { background: var(--card-light); }
-
-    .benefit-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
-
-    .benefit-card h4 { color: var(--gold); font-size: 1.3rem; margin-bottom: 10px; }
-
-    /* PRODUCTOS */
-    .products {
-      padding: 80px 20px;
-      max-width: 1200px;
-      margin: auto;
-      text-align: center;
-    }
-
-    .products h3 {
-      font-size: 2.4rem;
-      color: var(--gold);
-      margin-bottom: 50px;
-      font-weight: 800;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 35px;
-    }
-
-    .card {
-      background: var(--card-dark);
-      padding: 25px;
-      border-radius: 22px;
-      text-align: center;
-      transition: 0.3s;
-      position: relative;
-    }
-
-    body.light .card { background: var(--card-light); }
-
-    .card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.35); }
-
-    .card img { max-width: 100%; border-radius: 14px; margin-bottom: 18px; }
-
-    .card h4 { color: var(--gold); margin-bottom: 6px; font-size: 1.2rem; }
-
-    .price { font-size: 1.2rem; font-weight: 700; margin-bottom: 14px; }
-
-    .card a {
-      display: inline-block;
-      background: var(--green);
-      color: #fff;
-      padding: 12px 24px;
-      border-radius: 30px;
-      font-weight: 800;
-      transition: 0.25s;
-      box-shadow: 0 6px 20px rgba(37,211,102,0.3);
-    }
-
-    .card a:hover { background: #1ebe5d; transform: scale(1.05); }
-
-    .badge {
-      position: absolute;
-      top: 18px;
-      right: 18px;
-      background: var(--gold);
-      color: #000;
-      font-weight: 800;
-      font-size: 0.75rem;
-      padding: 6px 12px;
-      border-radius: 20px;
-    }
-
-    /* TESTIMONIOS */
-    .testimonials {
-      padding: 90px 20px;
-      background: linear-gradient(to bottom, #111, #000);
-      text-align: center;
-    }
-
-    body.light .testimonials {
-      background: linear-gradient(to bottom, #f5f5f5, #fff);
-    }
-
-    .testimonials h3 {
-      font-size: 2.4rem;
-      color: var(--gold);
-      margin-bottom: 50px;
-      font-weight: 800;
-    }
-
-    .testimonials-grid {
-      max-width: 1000px;
-      margin: auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 30px;
-    }
-
-    .testimonial {
-      background: var(--card-dark);
-      padding: 28px 24px;
-      border-radius: 20px;
-      font-style: italic;
-      transition: 0.3s;
-    }
-
-    body.light .testimonial { background: var(--card-light); }
-
-    .testimonial:hover { transform: translateY(-4px); box-shadow: 0 15px 30px rgba(0,0,0,0.25); }
-
-    .testimonial span {
-      display: block;
-      margin-top: 12px;
-      font-style: normal;
-      font-weight: 700;
-      color: var(--gold);
-    }
-
-    /* COMO COMPRAR */
-    .how-to {
-      padding: 80px 20px;
-      max-width: 1000px;
-      margin: auto;
-      text-align: center;
-    }
-
-    .how-to h3 { color: var(--gold); font-size: 2.3rem; margin-bottom: 30px; font-weight: 800; }
-
-    .steps {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 25px;
-      margin-top: 40px;
-    }
-
-    .step {
-      background: var(--card-dark);
-      padding: 25px;
-      border-radius: 18px;
-      font-weight: 600;
-    }
-
-    body.light .step { background: var(--card-light); }
-
-    .step span {
-      display: block;
-      font-size: 1.6rem;
-      font-weight: 800;
-      color: var(--gold);
-      margin-bottom: 10px;
-    }
-
-    /* CTA FINAL */
-    .final-cta {
-      padding: 90px 20px;
-      text-align: center;
-      background: radial-gradient(circle at top, rgba(37,211,102,0.2), transparent 60%),
-                  linear-gradient(to bottom, #000, #111);
-    }
-
-    body.light .final-cta {
-      background: radial-gradient(circle at top, rgba(37,211,102,0.15), transparent 60%),
-                  linear-gradient(to bottom, #fff, #f5f5f5);
-    }
-
-    .final-cta h3 {
-      font-size: 2.6rem;
-      color: var(--gold);
-      margin-bottom: 20px;
-      font-weight: 800;
-    }
-
-    .final-cta p {
-      font-size: 1.2rem;
-      margin-bottom: 30px;
-      opacity: 0.9;
-    }
-
-    .final-cta a {
-      display: inline-block;
-      background: var(--green);
-      color: #fff;
-      padding: 20px 40px;
-      border-radius: 60px;
-      font-weight: 800;
-      font-size: 1.15rem;
-      box-shadow: 0 12px 35px rgba(37,211,102,0.35);
-      transition: 0.25s;
-    }
-
-    .final-cta a:hover { transform: scale(1.06); background: #1ebe5d; }
-
-    /* FOOTER */
-    footer {
-      background: #000;
-      color: #fff;
-      text-align: center;
-      padding: 40px 20px;
-      font-size: 0.95rem;
-      opacity: 0.85;
-    }
-
-    body.light footer { background: #fff; color: #111; border-top: 1px solid #ddd; }
-
-    /* BOTÓN WHATSAPP FLOTANTE */
-    .whatsapp-float {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      background: var(--green);
-      color: #fff;
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 32px;
-      box-shadow: 0 12px 30px rgba(37,211,102,0.4);
-      z-index: 100;
-      transition: 0.25s;
-    }
-
-    .whatsapp-float:hover { transform: scale(1.1); background: #1ebe5d; }
-
-    /* RESPONSIVE */
-    @media(max-width: 640px) {
-      .hero h2 { font-size: 2.2rem; }
-      .benefits h3,
-      .products h3,
-      .testimonials h3,
-      .how-to h3,
-      .final-cta h3 { font-size: 2rem; }
-    }
-  </style>
+<style>
+:root{
+  --bg:#0d0d0d;
+  --panel:#111;
+  --accent:#FFD700;
+}
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  background:var(--bg);
+  color:white;
+  font-family:Arial;
+}
+header{
+  background:black;
+  padding:10px;
+  border-bottom:2px solid var(--accent);
+  text-align:center;
+  font-weight:bold;
+}
+#toolbar{
+  background:black;
+  padding:6px;
+  display:flex;
+  gap:8px;
+  justify-content:center;
+}
+button{
+  background:var(--accent);
+  border:none;
+  padding:6px 12px;
+  cursor:pointer;
+  font-weight:bold;
+  border-radius:6px;
+}
+#main{
+  flex:1;
+  display:flex;
+}
+#editors{
+  width:50%;
+  display:flex;
+  flex-direction:column;
+  border-right:2px solid var(--accent);
+}
+.tabs{
+  display:flex;
+}
+.tabs button{
+  flex:1;
+  background:#111;
+  color:white;
+}
+.tabs button.active{
+  background:var(--accent);
+  color:black;
+}
+.editor{
+  flex:1;
+}
+#preview{
+  flex:1;
+  border:none;
+  background:white;
+}
+.hidden{display:none}
+#output{
+  background:#000;
+  color:#0f0;
+  padding:10px;
+  font-size:12px;
+  max-height:160px;
+  overflow:auto;
+}
+</style>
 </head>
+
 <body>
 
-  <!-- HEADER -->
-  <header>
-    <h1>MAXIQUEEN</h1>
-    <nav>
-      <a href="#inicio">Inicio</a>
-      <a href="#productos">Productos</a>
-      <a href="#testimonios">Testimonios</a>
-      <a href="#como-comprar">Cómo comprar</a>
-      <button class="toggle-btn" onclick="toggleMode()">🌗</button>
-    </nav>
-  </header>
+<header>👑 MAXIQUEEN OS — Editor Universal de Páginas</header>
 
-  <!-- HERO ULTRA VENTA -->
-  <section class="hero" id="inicio">
-    <div>
-      <h2>Compra fácil. Recibe rápido. Paga seguro.</h2>
-      <p>Productos virales, moda y gadgets con entrega directa a tu casa. Compra en segundos por WhatsApp sin formularios ni complicaciones.</p>
-      <a class="cta" href="https://wa.me/573016625921?text=Hola%20MAXIQUEEN%20STORE.%20Quiero%20hacer%20un%20pedido." target="_blank">Comprar ahora por WhatsApp</a>
-      <div class="trust">⚡ Atención inmediata · 🚚 Envíos rápidos · 🔒 Compra segura</div>
+<div id="toolbar">
+  <button onclick="run()">▶ Run</button>
+  <button onclick="toggleEditors()">📦 Code</button>
+  <button onclick="toggleTheme()">🌗 Theme</button>
+  <button onclick="save()">💾 Save</button>
+  <button onclick="exportHTML()">📤 Export</button>
+</div>
+
+<div id="main">
+  <div id="editors">
+    <div class="tabs">
+      <button class="active" onclick="switchTab('html')">HTML</button>
+      <button onclick="switchTab('css')">CSS</button>
+      <button onclick="switchTab('js')">JS</button>
     </div>
-  </section>
+    <div id="html" class="editor"></div>
+    <div id="css" class="editor hidden"></div>
+    <div id="js" class="editor hidden"></div>
+  </div>
+  <iframe id="preview"></iframe>
+</div>
 
-  <!-- BENEFICIOS -->
-  <section class="benefits">
-    <h3>¿Por qué comprar en MAXIQUEEN?</h3>
-    <div class="benefits-grid">
-      <div class="benefit-card">
-        <h4>⚡ Compra directa</h4>
-        <p>Sin registros, sin carritos, sin procesos largos. Un clic y listo.</p>
-      </div>
-      <div class="benefit-card">
-        <h4>🚚 Entrega rápida</h4>
-        <p>Despachamos a tu casa con seguimiento claro y seguro.</p>
-      </div>
-      <div class="benefit-card">
-        <h4>💬 Atención humana</h4>
-        <p>Hablas directo con una persona real por WhatsApp.</p>
-      </div>
-      <div class="benefit-card">
-        <h4>🔥 Productos virales</h4>
-        <p>Seleccionamos solo lo que está funcionando en tendencia.</p>
-      </div>
-    </div>
-  </section>
+<pre id="output" class="hidden"></pre>
 
-  <!-- PRODUCTOS -->
-  <section class="products" id="productos">
-    <h3>Productos más vendidos</h3>
-    <div class="grid">
+<script>
+let theme = "material-darker";
+let visible = true;
 
-      <div class="card">
-        <span class="badge">🔥 Más vendido</span>
-        <img src="https://via.placeholder.com/260x260" alt="Auriculares inalámbricos">
-        <h4>Auriculares inalámbricos</h4>
-        <div class="price">$35.000 COP</div>
-        <a href="https://wa.me/573016625921?text=Hola%20MAXIQUEEN%20STORE.%20Quiero%20comprar%20los%20auriculares%20inalámbricos." target="_blank">Comprar por WhatsApp</a>
-      </div>
+const editors = {
+  html: CodeMirror(document.getElementById("html"),{
+    mode:"htmlmixed", theme, lineNumbers:true
+  }),
+  css: CodeMirror(document.getElementById("css"),{
+    mode:"css", theme, lineNumbers:true
+  }),
+  js: CodeMirror(document.getElementById("js"),{
+    mode:"javascript", theme, lineNumbers:true
+  })
+};
 
-      <div class="card">
-        <span class="badge">⭐ Recomendado</span>
-        <img src="https://via.placeholder.com/260x260" alt="Conjunto deportivo mujer">
-        <h4>Conjunto deportivo mujer</h4>
-        <div class="price">$55.000 COP</div>
-        <a href="https://wa.me/573016625921?text=Hola%20MAXIQUEEN%20STORE.%20Quiero%20comprar%20el%20conjunto%20deportivo." target="_blank">Comprar por WhatsApp</a>
-      </div>
+editors.html.setValue(`<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Nueva Página MAXIQUEEN</title>
+</head>
+<body>
+<h1>👑 Hola desde MAXIQUEEN OS</h1>
+<p>Edita esta página y expórtala.</p>
+</body>
+</html>`);
 
-      <div class="card">
-        <span class="badge">💨 Nuevo</span>
-        <img src="https://via.placeholder.com/260x260" alt="Ventilador USB portátil">
-        <h4>Ventilador USB portátil</h4>
-        <div class="price">$25.000 COP</div>
-        <a href="https://wa.me/573016625921?text=Hola%20MAXIQUEEN%20STORE.%20Quiero%20comprar%20el%20ventilador%20USB%20portátil." target="_blank">Comprar por WhatsApp</a>
-      </div>
+function switchTab(tab){
+  document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
+  event.target.classList.add("active");
+  Object.keys(editors).forEach(k=>{
+    document.getElementById(k).classList.toggle("hidden",k!==tab);
+    editors[k].refresh();
+  });
+}
 
-    </div>
-  </section>
+function run(){
+  const code = `
+  <style>${editors.css.getValue()}</style>
+  ${editors.html.getValue()}
+  <script>${editors.js.getValue()}<\/script>
+  `;
+  document.getElementById("preview").srcdoc = code;
+}
 
-  <!-- TESTIMONIOS -->
-  <section class="testimonials" id="testimonios">
-    <h3>Clientes felices</h3>
-    <div class="testimonials-grid">
-      <div class="testimonial">
-        “Me encantó el conjunto deportivo, llegó rápido y tal cual las fotos. ⭐⭐⭐⭐⭐”
-        <span>— Laura G.</span>
-      </div>
-      <div class="testimonial">
-        “Excelente atención por WhatsApp, compré y al otro día ya lo tenía.”
-        <span>— Andrés M.</span>
-      </div>
-      <div class="testimonial">
-        “Muy confiables, productos buenos y precios justos. Repetiré.”
-        <span>— Daniela R.</span>
-      </div>
-    </div>
-  </section>
+function toggleEditors(){
+  visible=!visible;
+  document.getElementById("editors").style.display = visible?"flex":"none";
+}
 
-  <!-- COMO COMPRAR -->
-  <section class="how-to" id="como-comprar">
-    <h3>Cómo comprar</h3>
-    <div class="steps">
-      <div class="step"><span>1</span>Elige tu producto</div>
-      <div class="step"><span>2</span>Haz clic en comprar por WhatsApp</div>
-      <div class="step"><span>3</span>Confirma tu pedido por chat</div>
-      <div class="step"><span>4</span>Recibe en tu casa y paga seguro</div>
-    </div>
-  </section>
+function toggleTheme(){
+  theme = theme==="material-darker"?"eclipse":"material-darker";
+  Object.values(editors).forEach(e=>e.setOption("theme",theme));
+}
 
-  <!-- CTA FINAL -->
-  <section class="final-cta">
-    <h3>¿Listo para tu pedido?</h3>
-    <p>Haz clic ahora y compra en menos de 60 segundos.</p>
-    <a href="https://wa.me/573016625921?text=Hola%20MAXIQUEEN%20STORE.%20Quiero%20hacer%20un%20pedido." target="_blank">Comprar ahora por WhatsApp</a>
-  </section>
+function save(){
+  localStorage.setItem("maxiqueen-page-editor",JSON.stringify({
+    html:editors.html.getValue(),
+    css:editors.css.getValue(),
+    js:editors.js.getValue()
+  }));
+  alert("💾 Guardado localmente");
+}
 
-  <!-- FOOTER -->
-  <footer>
-    © 2026 MAXIQUEEN STORE — Todos los derechos reservados
-  </footer>
+function exportHTML(){
+  const blob = new Blob([
+    `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Export MAXIQUEEN</title>
+<style>
+${editors.css.getValue()}
+</style>
+</head>
+<body>
+${editors.html.getValue()}
+<script>
+${editors.js.getValue()}
+<\/script>
+</body>
+</html>`
+  ],{type:"text/html"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "pagina-maxiqueen.html";
+  a.click();
+}
 
-  <!-- BOTÓN WHATSAPP FLOTANTE -->
-  <a href="https://wa.me/573016625921?text=Hola%20MAXIQUEEN%20STORE.%20Quiero%20información." target="_blank" class="whatsapp-float">💬</a>
+document.addEventListener("keydown",e=>{
+  if(e.ctrlKey && e.key==="Enter") run();
+  if(e.ctrlKey && e.key==="s"){ e.preventDefault(); save(); }
+  if(e.ctrlKey && e.key==="b") toggleEditors();
+  if(e.ctrlKey && e.shiftKey && e.key==="D") toggleTheme();
+});
 
-  <script>
-    function toggleMode() {
-      document.body.classList.toggle('light');
-    }
-  </script>
+run();
+</script>
 
 </body>
 </html>
